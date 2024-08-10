@@ -1,5 +1,5 @@
 ---
-- hosts: CPE
+- hosts: CPE_MX_Routers
   connection: local
   gather_facts: False
   become: False
