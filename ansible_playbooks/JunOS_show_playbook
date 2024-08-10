@@ -1,0 +1,23 @@
+---
+- hosts: CPE
+  connection: local
+  gather_facts: False
+  become: False
+  roles:
+    - juniper.junos
+  tasks:
+
+# Task to parse the output of various 'show' commands and send to {{ inventory_hostname }]_test_output.txt file.
+# Formats include regular test, json, and xml
+
+    - name:  "Show commands on all routers in the CPE group"
+      juniper_junos_command:
+        # define remote device parameters
+        commands:
+          - "show version"
+          - "show system uptime"
+          - "show bgp summary"
+          - <various show commands here>
+        user: "<user_name>"
+        passwd: "<password>"
+        dest: "{{ inventory_hostname }}_test_output.txt"
