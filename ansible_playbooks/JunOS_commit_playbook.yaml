@@ -1,0 +1,30 @@
+---
+- hosts: CPE_MX_Routers
+  connection: local
+  gather_facts: False
+  become: False
+  roles:
+    - juniper.junos
+  tasks:
+
+    - name: "Commit Configuration"
+      juniper_junos_config:
+        # define remote device parameters
+        user: "<username>"
+        passwd: "<password>"
+        # Commit check before committing and add comment
+        check: yes
+        comment: "<commit comment string>"
+        commit: yes
+        # retrieve option must be set in order to set the dest option.  'Candidate' takes a snapshot
+        # of the resulting file of the candidate config while 'committed' takes a snapshot of the config before the 
+        # set commands are applied
+        retrieve: "candidate"
+        config_mode: private
+        # Take a diff of the config after application and save the output file
+        diff: yes
+        diffs_file: "{{ inventory_hostname }}_diff_changes.txt"
+        # Config will be applied with set commands
+        load: set
+        src: "config/prefix_list.set"
+        dest: "{{ inventory_hostname }}_test_output.txt"
